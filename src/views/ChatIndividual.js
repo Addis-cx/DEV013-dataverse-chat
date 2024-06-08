@@ -28,6 +28,7 @@ export const chatIndividual = (film) => {
         const contentInput = inputMessage.value;
         
         if(contentInput !== "") {
+            //Si contentInput no está vacío
             const bubbleText = document.createElement("div");
             bubbleText.className = "bubbleSpace bubble";
             bubbleText.innerHTML = contentInput;

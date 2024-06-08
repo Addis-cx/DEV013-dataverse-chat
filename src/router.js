@@ -2,70 +2,78 @@ let ROUTES = {};
 let rootEl = "";
 
 export const setRootEl = (el) => {
+  // El parametro (el) representa x elemento HTML
   rootEl = el;
+  //rootEl es el contenedor principal donde se renderizarán todas las vistas 
 };
 
 export const setRoutes = (routes) => {
+  //routes es un objeto que contiene las rutas de la app
   if (typeof routes === "object") {
+    //Si routes es estrictamente igual a un objeto
     if (routes["/error"]) {
+      //Si ruoutes contiene la ruta de Error
       ROUTES = routes;
     }
-  }
-  // optional Throw errors if routes isn't an object
-  // optional Throw errors if routes doesn't define an /error route
-  // assign ROUTES
+  }//Si se cumplen las condicionales se asigna el objeto routes a la variable ROUTES
 };
 
 export const queryStringToObject = (queryString) => {
+  //El parametro (queryString) es la cadena de consulta
   const urlParams = new URLSearchParams(queryString);
-  const queryParams = {}; //// Convertir URLSearchParams a un objeto
+  const queryParams = {}; 
+  // Creamos un objeto vacio para almacenar Key, Value
   for (const [key, value] of urlParams) {
+    //Recorre todos los pares de Key Value en EL OBJETO urlParams
     queryParams[key] = value;
+    //Asignamos cada key y value al objeto queryParams
+    //"?id=123&name=John" = { id: "123", name: "John" }
   }
-  return queryParams; // Devolver el objeto
+  return queryParams;
+  //Devuelve el queryParams
 };
 
 export const renderView = (pathname, props = {}) => {
+  //pathname es la ruta de la vista que se va a renderizar
+  //props es un objeto vacio
   const root = rootEl;
+  //A la variable root se le asigna el elemento rootEl donde se renderizan las vistas ¿
   let view;
   root.innerHTML = "";
+  //Se limpia el elemento root
   if (ROUTES[pathname]) {
+    //Si en el objeto ROUTES hay una ruta especifica [pathname]
     view = ROUTES[pathname](props);
+    //Si se cumple, se llama a la función y se le pasa el objeto props
   } else {
     view = ROUTES["/error"](props);
+    //Si la ruta no está definida en ROUTES se llama a la ruta de error y se le pasa el objeto props
   }
   root.appendChild(view);
+  //view se añade como hijo al elemento root para renderizar en la vista
 };
 
 export const navigateTo = (pathname, props = {}) => {
  history.pushState({}, "", pathname);
+ //Con history se puede mirar el historial 
  const apartRoot = pathname.split("?");
  pathname = apartRoot[0];
  props = apartRoot[1];
  const propsObject = queryStringToObject(props);
  
-
-  // const searchParams = new URLSearchParams();
-  // Object.entries(props).forEach(([key, value]) => {
-  //   console.log("🚀 ~ Object.entries ~ props:", props)
-  //   searchParams.set(key, value);
-  // });
-  // console.log("🚀 ~ navigateTo ~ searchParams:", searchParams)
-  // const queryString = searchParams.toString();
-  // console.log("🚀 ~ navigateTo ~ queryString:", queryString)
-
-  // const URLvisited = `${pathname}${queryString ? `?${queryString}` : ""}`;
-  // // console.log("guarda", window.location.origin + pathname);
-  // console.log("🚀 ~ navigateTo ~ URLvisited:", URLvisited)
- // history.pushState({ pathname, props }, "", URLvisited);
-  renderView(pathname, propsObject);
+ renderView(pathname, propsObject);
 };
 
 export const onURLChange = (location) => {
-  // const pathname = window.location.pathname;
   const newProps = queryStringToObject(window.location.search);
   renderView(location, newProps);
-  // parse the location for the pathname and search params
-  // convert the search params to an object
-  // render the view with the pathname and object
 };
+
+// const searchParams = new URLSearchParams();
+// Object.entries(props).forEach(([key, value]) => {
+//   searchParams.set(key, value);
+// });
+// const queryString = searchParams.toString();
+
+// const URLvisited = `${pathname}${queryString ? `?${queryString}` : ""}`;
+// history.pushState({ pathname, props }, "", URLvisited);
