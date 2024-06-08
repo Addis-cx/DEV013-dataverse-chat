@@ -91,9 +91,5 @@ export const home = () => {
     movieCards.appendChild(cards([...newData]));
   });
 
-  // chatButton.addEventListener("click", function() {
-  //   navigateTo("/chatIndividual", {});
-  // })
-
   return viewHome;
 };

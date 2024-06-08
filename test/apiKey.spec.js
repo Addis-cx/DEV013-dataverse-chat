@@ -1,7 +1,4 @@
-// test/apiKey.spec.js
-
 import { getApiKey, setApiKey } from '../src/Lib/apiKey.js';
-//import { apiK } from '../src/views/APIKEY.js';
 
 describe('getApiKey', () => {
   it('debería regresar correctamente el valor de la API Key', () => {
